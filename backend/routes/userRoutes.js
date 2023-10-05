@@ -17,7 +17,7 @@ const router = Router();
  * ||
  * \/
  */
-router.route("/api/users").get(getUsers).delete(deleteUsers);
+router.route("/users").get(getUsers).delete(deleteUsers);
 
 /**
  * GET: 
@@ -30,7 +30,7 @@ router.route("/api/users").get(getUsers).delete(deleteUsers);
  * \/
  */
 router
-  .route("/api/user/:userId")
+  .route("/user/:userId")
   .get(getSpecificUser)
   .put(updateSpecificUser)
   .delete(deleteSpecificUser);
@@ -41,7 +41,7 @@ router
  * ||
  * \/
  */
-router.route("/api/user/:userId/follow").put(followSpecificUser);
+router.route("/user/:userId/follow").put(followSpecificUser);
 
 /**
  * PUT: 
@@ -49,6 +49,6 @@ router.route("/api/user/:userId/follow").put(followSpecificUser);
  * ||
  * \/
 */
-router.route("/api/user/:userId/unfollow").put(unFollowSpecificUser);
+router.route("/user/:userId/unfollow").put(unFollowSpecificUser);
 
 export default router;

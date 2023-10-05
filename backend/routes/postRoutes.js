@@ -17,7 +17,7 @@ const router = Router();
  * ||
  * \/
  */
-router.route("/api/posts").get(getPosts).delete(deletePosts);
+router.route("/posts").get(getPosts).delete(deletePosts);
 
 /**
  * POST create Post with createPost function
@@ -25,7 +25,7 @@ router.route("/api/posts").get(getPosts).delete(deletePosts);
  * \/
  */
 
-router.route("/api/post").post(createPost);
+router.route("/post").post(createPost);
 
 /**
  * GET:
@@ -38,7 +38,7 @@ router.route("/api/post").post(createPost);
  * \/
  */
 router
-  .route("/api/post/:postId")
+  .route("/post/:postId")
   .get(getSpecificPost)
   .put(updateSpecificPost)
   .delete(deleteSpecificPost);
@@ -50,7 +50,7 @@ router
  * \/
  */
 
-router.route("/api/post/:postId/like").post(likeAndDisLikeAPost);
+router.route("/post/:postId/like").post(likeAndDisLikeAPost);
 /**
  * GET:
  * get a timeline posts
@@ -58,7 +58,7 @@ router.route("/api/post/:postId/like").post(likeAndDisLikeAPost);
  * \/
  */
 
-router.route("/api/posts/timeline").get(getTimeLinePosts);
+router.route("/posts/timeline/:userId").get(getTimeLinePosts);
 
 
 
