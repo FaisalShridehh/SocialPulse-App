@@ -7,7 +7,9 @@ import {
   getSpecificPost,
   getTimeLinePosts,
   likeAndDisLikeAPost,
+  loveAndDisLoveAPost,
   updateSpecificPost,
+  getUsersPosts,
 } from "../controllers/postController.js";
 
 const router = Router();
@@ -50,7 +52,8 @@ router
  * \/
  */
 
-router.route("/post/:postId/like").post(likeAndDisLikeAPost);
+router.route("/post/:postId/like").put(likeAndDisLikeAPost);
+router.route("/post/:postId/love").put(loveAndDisLoveAPost);
 /**
  * GET:
  * get a timeline posts
@@ -59,6 +62,20 @@ router.route("/post/:postId/like").post(likeAndDisLikeAPost);
  */
 
 router.route("/posts/timeline/:userId").get(getTimeLinePosts);
+
+/**
+ * GET:
+ * get a users's posts
+ * ||
+ * \/
+ */
+
+router.route("/posts/profile/:username").get(getUsersPosts);
+
+
+
+
+
 
 
 

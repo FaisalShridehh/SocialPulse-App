@@ -64,7 +64,12 @@ export const deleteUsers = async (req, res, next) => {
  */
 export const getSpecificUser = async (req, res, next) => {
   try {
-    const user = await User.findById(req.params.userId);
+    const userId = req.query.userId;
+    const username = req.query.username;
+
+    const user = userId
+      ? await User.findById(req.query.userId)
+      : await User.findOne({ username: req.query.username });
 
     if (!user) {
       return res.status(404).send({
@@ -80,6 +85,34 @@ export const getSpecificUser = async (req, res, next) => {
   } catch (error) {
     return res.status(500).json({
       message: "error getting specific user",
+      error: error,
+    });
+  }
+};
+
+export const getFriendsData = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+
+    const user = await User.findById(userId);
+
+    const friends = await Promise.all(
+      user.followings.map((follower) => {
+        return User.findById(follower);
+      })
+    );
+
+    let friendList = [];
+    friends.map((friend) => {
+      const { _id, username, profilePicture } = friend;
+
+      friendList.push({ _id, username, profilePicture });
+    });
+
+    return res.status(200).json(friendList);
+  } catch (error) {
+    return res.status(500).json({
+      message: "error getting friends data",
       error: error,
     });
   }

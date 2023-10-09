@@ -17,6 +17,10 @@ const postSchema = new mongoose.Schema(
       type: Array,
       default: [],
     },
+    hearts: {
+      type: Array,
+      default: [],
+    },
   },
   {
     timestamps: true,

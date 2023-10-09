@@ -1,8 +1,12 @@
-import profileImage from "../../../assets/person/2.jpg";
+import { useContext } from "react";
+import profileImage from "../../../assets/person/default.png";
 
 import PropTypes from "prop-types";
+import { AuthContext } from "../../../Context/AuthContext/AuthContext";
 
 export const Sidebar = ({ isOpen, onClose }) => {
+  const { user } = useContext(AuthContext);
+
   return (
     <div
       className={`fixed top-0 right-0 h-full w-full mobile:w-64 bg-white z-50 transform ${
@@ -11,9 +15,12 @@ export const Sidebar = ({ isOpen, onClose }) => {
     >
       <div className="flex justify-between items-center p-4">
         <img
-          src={profileImage}
+          src={user?.profilePicture ? user?.profilePicture : profileImage}
           alt="Profile Image"
           className="w-16 h-16 rounded-full object-cover aspect-auto cursor-pointer"
+          title={`${
+            user.firstName.charAt(0).toUpperCase() + user.firstName.slice(1)
+          }'s Profile`}
         />
         <button
           onClick={onClose}
@@ -54,6 +61,6 @@ export const Sidebar = ({ isOpen, onClose }) => {
   );
 };
 Sidebar.propTypes = {
-  isOpen: PropTypes.func,
-  onClose: PropTypes.func,
+  isOpen: PropTypes.bool,
+  onClose: PropTypes.bool,
 };

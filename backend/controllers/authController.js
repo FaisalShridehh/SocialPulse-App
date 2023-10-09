@@ -19,9 +19,17 @@ export const registerUser = async (req, res) => {
     const saltRounds = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(req.body.password, saltRounds);
 
+    // const user = new User({
+    //   firstName: req.body.firstName,
+    //   lastName: req.body.lastName,
+    //   username: req.body.firstName +" "+ req.body.lastName,
+    //   email: req.body.email,
+    //   password: hashedPassword,
+    // });
+
     const user = new User({
-      username: req.body.username,
-      email: req.body.email,
+      ...req.body,
+      username: req.body.firstName + " " + req.body.lastName,
       password: hashedPassword,
     });
 
@@ -39,7 +47,10 @@ export const registerUser = async (req, res) => {
   } catch (error) {
     return res
       .status(500)
-      .json({ message: "Error happens while login the user", error });
+      .json({
+        message: "Error happens while register the user",
+        error: error.message,
+      });
   }
 };
 

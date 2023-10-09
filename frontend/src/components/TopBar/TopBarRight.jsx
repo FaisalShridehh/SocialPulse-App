@@ -1,25 +1,29 @@
 import Notification from "../iconsComponents/Notification";
 import Person from "../iconsComponents/Person";
-import profileImage from "../../assets/person/2.jpg";
+import profileImage from "../../assets/person/default.png";
 import Chat from "../iconsComponents/Chat";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Sidebar } from "./TopRight/Sidebar";
+import { AuthContext } from "../../Context/AuthContext/AuthContext";
+import { Link } from "react-router-dom";
+const BaseBackEndUrl = import.meta.env.VITE_BACKEND_URL;
 
 export default function TopBarRight() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const { user } = useContext(AuthContext);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
-  // Function to close the sidebar when the window is resized
-  const closeSidebarOnResize = () => {
-    if (isSidebarOpen && window.innerWidth >= 1024) {
-      setIsSidebarOpen(false);
-    }
-  };
 
   // Add event listener to window resize
   useEffect(() => {
+    // Function to close the sidebar when the window is resized
+    const closeSidebarOnResize = () => {
+      if (isSidebarOpen && window.innerWidth >= 1024) {
+        setIsSidebarOpen(false);
+      }
+    };
     window.addEventListener("resize", closeSidebarOnResize);
 
     return () => {
@@ -89,11 +93,16 @@ export default function TopBarRight() {
       </div>
       {/*  */}
       <div className="w-fit mr-4">
-        <img
-          src={profileImage}
-          alt="Profile Image"
-          className="profile-image hidden lg:block w-11 h-11 rounded-full object-cover aspect-auto cursor-pointer "
-        />
+        <Link to={`/profile/${user.username}`}>
+          <img
+            src={user?.profilePicture ? user?.profilePicture : profileImage}
+            alt="Profile Image"
+            className="profile-image hidden lg:block w-11 h-11 rounded-full object-cover aspect-auto cursor-pointer "
+            title={`${
+              user.firstName.charAt(0).toUpperCase() + user.firstName.slice(1)
+            }'s Profile`}
+          />
+        </Link>
       </div>
 
       {/* Mobile Menu Button */}

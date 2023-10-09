@@ -1,4 +1,9 @@
+import axios from "axios";
 import PropTypes from "prop-types";
+import { useContext, useEffect } from "react";
+import { AuthContext } from "../../Context/AuthContext/AuthContext";
+const BaseBackEndUrl = import.meta.env.VITE_BACKEND_URL;
+
 export default function Like({
   className,
   fill,
@@ -10,13 +15,38 @@ export default function Like({
   likeClicked,
   setLikeClicked,
   setHeartClicked,
+  post,
 }) {
-  function handleOnLike() {
-    setLike(likeClicked ? like - 1 : like + 1);
-    setHeart(0)
-    setIsLiked(!isLiked);
-    setLikeClicked(!likeClicked);
-    setHeartClicked(false);
+  const { user } = useContext(AuthContext);
+
+  async function handleOnLike() {
+    try {
+      const response = await axios.put(
+        `${BaseBackEndUrl}/post/${post._id}/like`,
+        {
+          userId: user._id,
+        }
+      );
+
+      // Check if response.data exists and has likedPost property
+      if (response?.data?.likedPost) {
+        // User liked the post, increment the like count
+        setLike(response.data.likedPost.likes.length);
+        setHeart(response.data.likedPost.hearts.length);
+      } else if (response?.data?.disLikedPost) {
+        // User disliked the post, decrement the like count
+        setLike(response.data.disLikedPost.likes.length);
+        setHeart(response.data.disLikedPost.hearts.length);
+      }
+
+      // setLike(likeClicked ? like - 1 : like + 1);
+      // setHeart(0)
+      setIsLiked(!isLiked);
+      setLikeClicked(!likeClicked);
+      setHeartClicked(false);
+    } catch (error) {
+      console.error(error);
+    }
   }
   return (
     <button
@@ -53,4 +83,5 @@ Like.propTypes = {
   likeClicked: PropTypes.bool,
   setLikeClicked: PropTypes.func,
   setHeartClicked: PropTypes.func,
+  post: PropTypes.object,
 };

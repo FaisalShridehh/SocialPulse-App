@@ -39,9 +39,12 @@ export const getPosts = async (req, res, next) => {
  */
 export const deletePosts = async (req, res, next) => {
   try {
-    const posts = await Post.deleteMany({}, {
-      new: true,
-    });
+    const posts = await Post.deleteMany(
+      {},
+      {
+        new: true,
+      }
+    );
     console.log(posts);
 
     if (!posts.deletedCount)
@@ -134,9 +137,11 @@ export const updateSpecificPost = async (req, res, next) => {
     // if (post.description === req.body.description) return res.status(403).json({message: "Nothing change to description"})
 
     const updatedPost = await Post.findByIdAndUpdate(
-      req.params.postId, {
+      req.params.postId,
+      {
         $set: req.body,
-      }, {
+      },
+      {
         new: true,
       }
     );
@@ -202,11 +207,16 @@ export const likeAndDisLikeAPost = async (req, res, next) => {
 
     if (!post.likes.includes(req.body.userId)) {
       const likedPost = await Post.findByIdAndUpdate(
-        req.params.postId, {
+        req.params.postId,
+        {
           $push: {
             likes: req.body.userId,
           },
-        }, {
+          $pull: {
+            hearts: req.body.userId,
+          },
+        },
+        {
           new: true,
         }
       );
@@ -216,11 +226,13 @@ export const likeAndDisLikeAPost = async (req, res, next) => {
       });
     } else {
       const disLikedPost = await Post.findByIdAndUpdate(
-        req.params.postId, {
+        req.params.postId,
+        {
           $pull: {
             likes: req.body.userId,
           },
-        }, {
+        },
+        {
           new: true,
         }
       );
@@ -232,6 +244,53 @@ export const likeAndDisLikeAPost = async (req, res, next) => {
   } catch (error) {
     return res.status(500).json({
       message: "error in Like a post",
+      error: error,
+    });
+  }
+};
+export const loveAndDisLoveAPost = async (req, res, next) => {
+  try {
+    const post = await Post.findById(req.params.postId);
+
+    if (!post.hearts.includes(req.body.userId)) {
+      const lovedPost = await Post.findByIdAndUpdate(
+        req.params.postId,
+        {
+          $push: {
+            hearts: req.body.userId,
+          },
+          $pull: {
+            likes: req.body.userId,
+          },
+        },
+        {
+          new: true,
+        }
+      );
+      return res.status(200).json({
+        message: "successfully loved a post",
+        lovedPost,
+      });
+    } else {
+      const disLovedPost = await Post.findByIdAndUpdate(
+        req.params.postId,
+        {
+          $pull: {
+            hearts: req.body.userId,
+          },
+        },
+        {
+          new: true,
+        }
+      );
+      return res.status(200).json({
+        message: "successfully disLoved a post",
+        disLovedPost,
+      });
+    }
+  } catch (error) {
+    return res.status(500).json({
+      message: "error in Love a post",
       error: error,
     });
   }
@@ -249,17 +308,50 @@ export const getTimeLinePosts = async (req, res, next) => {
     const currentUser = await User.findById(req.params.userId);
     const userPosts = await Post.find({
       userId: currentUser.id,
-    });
+    }).sort({ createdAt: -1 });
     // i should use promise.all if i am using loop , if i did it only with await the loop will not execute
     const friendPosts = await Promise.all(
       currentUser.followings.map((friendId) => {
         return Post.find({
           userId: friendId,
-        });
+        }).sort({ createdAt: -1 });
       })
     );
 
     return res.status(200).json(userPosts.concat(...friendPosts));
+  } catch (error) {
+    return res.status(500).json({
+      message: "error in get timeline posts",
+      error: error,
+    });
+  }
+};
+
+/**
+ * GET
+ * get a user's posts
+ * ||
+ * \/
+ */
+
+export const getUsersPosts = async (req, res, next) => {
+  try {
+    const currentUser = await User.findOne({ username: req.params.username });
+
+    if (!currentUser)
+      return res.status(404).json({ message: "User not found" });
+
+    // console.log("currentUser => ", currentUser);
+    const userPosts = await Post.find({
+      userId: currentUser.id,
+    }).sort({ createdAt: -1 });
+    if (!userPosts)
+      return res
+        .status(404)
+        .json({ message: "There is no posts for this current user not found" });
+
+    // console.log("userPosts => ", userPosts);
+    return res.status(200).json(userPosts);
   } catch (error) {
     return res.status(500).json({
       message: "error in get timeline posts",

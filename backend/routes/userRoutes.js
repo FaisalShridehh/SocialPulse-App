@@ -7,6 +7,7 @@ import {
   followSpecificUser,
   unFollowSpecificUser,
   deleteUsers,
+  getFriendsData,
 } from "../controllers/userController.js";
 
 const router = Router();
@@ -20,23 +21,32 @@ const router = Router();
 router.route("/users").get(getUsers).delete(deleteUsers);
 
 /**
- * GET: 
+ * GET:
  * get a user with getSpecificUser function
- * PUT: 
+ * PUT:
  * update user with updateUser function
- * DELETE: 
+ * DELETE:
  * delete user with deleteUser function
  * ||
  * \/
  */
+router.route("/user").get(getSpecificUser);
 router
   .route("/user/:userId")
-  .get(getSpecificUser)
   .put(updateSpecificUser)
   .delete(deleteSpecificUser);
 
 /**
- * PUT: 
+ * GET:
+ * get a friends data
+ * ||
+ * \/
+ */
+
+router.route("/friends/:userId").get(getFriendsData);
+
+/**
+ * PUT:
  * follow a user
  * ||
  * \/
@@ -44,11 +54,11 @@ router
 router.route("/user/:userId/follow").put(followSpecificUser);
 
 /**
- * PUT: 
+ * PUT:
  * Un-Follow a user
  * ||
  * \/
-*/
+ */
 router.route("/user/:userId/unfollow").put(unFollowSpecificUser);
 
 export default router;
