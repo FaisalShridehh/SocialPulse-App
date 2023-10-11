@@ -90,6 +90,13 @@ export const getSpecificUser = async (req, res, next) => {
   }
 };
 
+/**
+ * GET
+ * Get friends data
+ * ||
+ * \/
+ */
+
 export const getFriendsData = async (req, res) => {
   try {
     const userId = req.params.userId;

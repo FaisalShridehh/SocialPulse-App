@@ -36,3 +36,15 @@ html {
 .right-bar::-webkit-scrollbar-thumb {
   background-color: rgb(179, 179, 179);
 }
+
+.chat-box-wrapper::-webkit-scrollbar {
+  width: 2px;
+}
+
+.chat-box-wrapper::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
+}
+
+.chat-box-wrapper::-webkit-scrollbar-thumb {
+  background-color: rgb(179, 179, 179);
+}

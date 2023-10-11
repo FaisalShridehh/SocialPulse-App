@@ -11,6 +11,8 @@ import connectDB from "./config/database.js";
 import userRoutes from "./routes/userRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import postRoutes from "./routes/postRoutes.js";
+import conversationRoutes from "./routes/conversationRoutes.js";
+import messageRoutes from "./routes/messageRoutes.js";
 
 const app = express();
 const port = 3000 || process.env.PORT;
@@ -57,6 +59,8 @@ app.post("/api/upload", upload.single("file"), (req, res) => {
 app.use("/api/", userRoutes);
 app.use("/api/", authRoutes);
 app.use("/api/", postRoutes);
+app.use("/api/", conversationRoutes);
+app.use("/api/", messageRoutes);
 
 app.listen(port, () => {
   console.log(`server listening on ${port}`);

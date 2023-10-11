@@ -12,7 +12,7 @@ export async function loginCall(userCredentials, dispatch) {
   });
   try {
     const response = await axios.post(
-      `${BaseBackEndUrl}/login`,
+      `${BaseBackEndUrl}login`,
       userCredentials
     );
 
@@ -28,6 +28,8 @@ export async function loginCall(userCredentials, dispatch) {
       type: "LOGIN_SUCCESS",
       userPayload: response.data.isUserExist,
     });
+
+    // localStorage.setItem("user", JSON.stringify(response.data.isUserExist));
   } catch (error) {
     console.error(error);
     dispatch({

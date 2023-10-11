@@ -68,7 +68,7 @@ export default function TopBarRight() {
           </button>
         </div>
         <div className="top-bar-icon-item mr-[15px] cursor-pointer relative">
-          <button className="hover:bg-gray-400/20 rounded-full flex items-center">
+          <Link to={"/messenger"} className="hover:bg-gray-400/20 rounded-full flex items-center">
             <Chat
               fill="currentColor"
               className="w-4 h-4 sm:w-5 sm:h-5 "
@@ -77,7 +77,7 @@ export default function TopBarRight() {
             <span className="top-bar-icon-badge flex justify-center items-center text-sm p-2 sm:text-base absolute w-3 h-3 sm:w-4 sm:h-4 text-white bg-red-500 rounded-full  -top-2 -right-2">
               2
             </span>
-          </button>
+          </Link>
         </div>
         <div className="top-bar-icon-item mr-[15px] cursor-pointer relative">
           <button className="hover:bg-gray-400/20 rounded-full flex items-center">

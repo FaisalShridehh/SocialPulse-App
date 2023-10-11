@@ -1,37 +1,51 @@
-import { createContext, useReducer } from "react";
+import { createContext, useEffect, useReducer } from "react";
 import AuthReducer from "./AuthReducer";
 
-const INITIAL_STATE = {
-  user: {
-    _id: "652191be0273a019298fc725",
-    firstName: "faisal",
-    lastName: "shrideh",
-    username: "faisal shrideh",
-    email: "faisal@yahoo.com",
-    password: "$2b$10$hJ6Qws8eBjDjty1W61m1vOdScKcRiuIpFZs07xoPv8rvj/P3z3UDq",
-    profilePicture: "",
-    coverPicture: "",
-    followers: [],
-    followings: ["652192120273a019298fc72b"],
-    isAdmin: false,
-    createdAt: "2023-10-07T17:13:34.846Z",
-    updatedAt: "2023-10-07T17:52:48.421Z",
-    __v: 0,
-  },
-  isFetching: false,
-  error: false,
-};
+// const INITIAL_STATE = {
+//   user: {
+//     _id: "65248266b1fd54b95d309c67",
+//     firstName: "Faisal",
+//     lastName: "Shrideh",
+//     username: "Faisal Shrideh",
+//     email: "Faisal@yahoo.com",
+//     password: "$2b$10$GDzhe3gZqvKjsnt/C7SojONPXJ5VHQfDWHXUvJg/Gzu3BIM5rmK2i",
+//     profilePicture: "",
+//     coverPicture: "",
+//     followers: [],
+//     followings: ["6524824db1fd54b95d309c64"],
+//     isAdmin: false,
+//     description: "Hey Im Faisal Welcome To My Profile",
+//     city: "Irbid",
+//     from: "Jordan",
+//     relationship: 2,
+//     createdAt: "2023-10-09T22:44:54.705Z",
+//     updatedAt: "2023-10-09T22:46:06.406Z",
+//     __v: 0,
+//   },
+//   isFetching: false,
+//   error: false,
+// };
+
 // const INITIAL_STATE = {
 //   user: null,
 //   isFetching: false,
 //   error: false,
 // };
 
+const INITIAL_STATE = {
+  user: JSON.parse(localStorage.getItem("user")) || null,
+  isFetching: false,
+  error: false,
+};
+
 export const AuthContext = createContext(INITIAL_STATE);
 
 export function AuthContextProvider({ children }) {
   const [state, dispatch] = useReducer(AuthReducer, INITIAL_STATE);
 
+  useEffect(() => {
+    localStorage.setItem("user", JSON.stringify(state.user));
+  }, [state.user]);
   // console.log(state);
   return (
     <AuthContext.Provider
